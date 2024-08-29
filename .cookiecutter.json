@@ -1,0 +1,16 @@
+{
+  "_checkout": "2022.6.3",
+  "_output_dir": "/home/work/Dokumente/Projects/BashMetaHandler",
+  "_repo_dir": "/home/work/.cookiecutters/cookiecutter-hypermodern-python",
+  "_template": "gh:cjolowicz/cookiecutter-hypermodern-python",
+  "author": "Alexander Gundermann",
+  "copyright_year": "2024",
+  "development_status": "Development Status :: 3 - Alpha",
+  "email": "416c657861@posteo.de",
+  "friendly_name": "bmh",
+  "github_user": "000AG000",
+  "license": "MIT",
+  "package_name": "BashMetaHandler",
+  "project_name": "BashMetaHandler",
+  "version": "0.0.0"
+}
