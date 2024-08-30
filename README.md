@@ -23,7 +23,7 @@
 
 ## Features
 
-- TODO
+It provites an interpreter for a own bash meta languange
 
 ## Requirements
 
