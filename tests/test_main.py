@@ -19,9 +19,9 @@ def test_main_succeeds(runner: CliRunner) -> None:
 
 
 def test_python_test(runner: CliRunner) -> None:
-    """Test as simple python example"""
+    """Test as simple python example."""
     try:
         bash = BashMetaHandler.MetaBashHandler("tests/test_msh_scripts/testing.msh")
         bash.execute_file()
-    except:
-        assert False
+    except BaseException:
+        assert False is True

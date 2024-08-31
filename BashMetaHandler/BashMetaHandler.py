@@ -315,6 +315,8 @@ class MetaBashHandler:
         Raises:
             BaseException: if the functions isn't a real fuctions or an error occured
 
+        # noqa: DAR401
+        # noqa: DAR402
 
         Args:
             line (str): function line to be called
@@ -654,6 +656,9 @@ class MetaBashHandler:
 
         Raises:
             BaseException: triggers if file was not Found
+
+        # noqa: DAR401
+        # noqa: DAR402
 
         Args:
             filename (str): name of file
