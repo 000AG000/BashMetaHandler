@@ -51,6 +51,9 @@ myst-parser = {version = ">=0.16.1"}
 [tool.poetry.scripts]
 BashMetaHandler = "BashMetaHandler.__main__:main"
 
+[tool.poetry.group.dev.dependencies]
+nox-poetry = "^1.0.3"
+
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]
 tests = ["tests", "*/tests"]

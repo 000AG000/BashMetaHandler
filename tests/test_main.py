@@ -2,6 +2,7 @@
 import pytest
 from click.testing import CliRunner
 
+import BashMetaHandler
 from BashMetaHandler import __main__
 
 
@@ -15,3 +16,12 @@ def test_main_succeeds(runner: CliRunner) -> None:
     """It exits with a status code of zero."""
     result = runner.invoke(__main__.main)
     assert result.exit_code == 0
+
+
+def test_python_test(runner: CliRunner) -> None:
+    """Test as simple python example"""
+    try:
+        bash = BashMetaHandler.metaBashHandler("tests/test_msh_scripts/testing.msh")
+        bash.executeFile()
+    except:
+        assert False

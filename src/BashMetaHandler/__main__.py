@@ -1,12 +1,12 @@
 """Command-line interface."""
-from BashMetaHandler import *
 import click
 
 
 @click.command()
 @click.version_option()
-def main():
+def main() -> int:
     print("test")
+    return 0
 
 
 if __name__ == "__main__":
