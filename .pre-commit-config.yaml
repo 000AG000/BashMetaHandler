@@ -24,6 +24,7 @@ repos:
       - id: darglint
         name: darglint
         entry: darglint
+        exclude: ^*test_env/lib/python3.10/site-packages/*
         language: system
         types: [python]
         stages: [manual]
