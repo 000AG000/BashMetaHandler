@@ -1,15 +1,15 @@
+"""start of main script of bash meta handler!"""
 import datetime
 import time
-from getpass import getpass
 
 import pexpect  # type: ignore
 
 
-def check(BashHandler, search_string):
-    """check function for MetaBashHandler checks whether string is found in gotten line
+def check(bash_handler, search_string):
+    """Check function for MetaBashHandler checks whether string is found in gotten line.
 
     Args:
-        BashHandler (MetaBashHandler): MetaBashHandler used
+        bash_handler (MetaBashHandler): MetaBashHandler used
         search_string (string): search string
 
     Returns:
@@ -19,34 +19,40 @@ def check(BashHandler, search_string):
     # 	search_string = str(search_string)
     if search_string[0] == '"' and search_string[len(search_string) - 1] == '"':
         search_string = search_string[1 : len(search_string) - 1]
-    # print(f"history: {BashHandler.history}")
-    # print(f"l = {BashHandler.history[len(BashHandler.history)-1].find(search_string)}")
-    for iK in range(2):
-        # print(f"iK = {iK}")
-        if len(BashHandler.history) - 1 - iK >= 0:
-            i = BashHandler.history[len(BashHandler.history) - 1 - iK].find(
+    # print(f"history: {bash_handler.history}")
+    # print(f"l = \
+    # {bash_handler.history[len(bash_handler.history)-1].find(search_string)}")
+    for i_k in range(2):
+        # print(f"i_k = {i_k}")
+        if len(bash_handler.history) - 1 - i_k >= 0:
+            i = bash_handler.history[len(bash_handler.history) - 1 - i_k].find(
                 search_string
             )
-            # print(f"{BashHandler.history[len(BashHandler.history)-1-iK]} - {search_string},{BashHandler.history[len(BashHandler.history)-1-iK].__class__} - {search_string.__class__}\n i = {i}")
-            # print(f"len: {len(BashHandler.history)}, index: {len(BashHandler.history)-1-i}")
+            # print(f"{bash_handler.history[len(bash_handler.history)-1-i_k]} - \
+            # {search_string},\
+            # {bash_handler.history[len(bash_handler.history)-1-i_k].__class__}\
+            #  - {search_string.__class__}\n i = {i}")
+            # print(f"len: {len(bash_handler.history)}, index: \
+            # {len(bash_handler.history)-1-i}")
             if i != -1:
-                # print(f"last: {BashHandler.history[len(BashHandler.history)-1-iK]}")
+                # print(f"last: {bash_handler.history[\
+                # len(bash_handler.history)-1-i_k]}")
                 print(
-                    f" {search_string} found in {BashHandler.history[len(BashHandler.history)-1-iK]}"
+                    f" {search_string} found in {bash_handler.history[len(bash_handler.history)-1-i_k]}"
                 )
 
                 return True
             print(
-                f" {search_string} not found in {BashHandler.history[len(BashHandler.history)-iK-1]}"
+                f" {search_string} not found in {bash_handler.history[len(bash_handler.history)-i_k-1]}"
             )
     return False
 
 
-def do_not(BashHandler, b):
-    """return inverse
+def do_not(bash_handler, b):
+    """Return inverse.
 
     Args:
-        BashHandler (BashMetaHandler): BashMetaHandler (not used)
+        bash_handler (BashMetaHandler): BashMetaHandler (not used)
         b (boolean or string): input to take inverse
 
     Returns:
@@ -59,11 +65,11 @@ def do_not(BashHandler, b):
     return not b
 
 
-def equal(BashHandler, args, argf=[]):
-    """check whether arguemtns arge equal
+def equal(bash_handler, args, argf=[]):
+    """Check whether arguemtns arge equal.
 
     Args:
-        BashHandler (BashMetaHandler): BashMetaHandler to be used
+        bash_handler (BashMetaHandler): BashMetaHandler to be used
         args (list or string): first comparison or list of to arguments to be compared
         argf (list, optional): second comparispyon. Defaults to [].
 
@@ -77,9 +83,9 @@ def equal(BashHandler, args, argf=[]):
             split_arg[1][0] != '"' and split_arg[1][len(split_arg[1]) - 1] != '"'
         ):
             try:
-                ret = BashHandler.callFunc(split_arg[1], -1)
+                ret = bash_handler.call_func(split_arg[1], -1)
                 cmp1 = str(ret)
-            except:
+            except BaseException:
                 cmp1 = split_arg[1]
         else:
             cmp1 = split_arg[1]
@@ -88,9 +94,9 @@ def equal(BashHandler, args, argf=[]):
             split_arg[0][0] != '"' and split_arg[0][len(split_arg[0]) - 1] != '"'
         ):
             try:
-                ret = BashHandler.callFunc(split_arg[0], -1)
+                ret = bash_handler.call_func(split_arg[0], -1)
                 cmp0 = str(ret)
-            except:
+            except BaseException:
                 cmp0 = split_arg[0]
         else:
             cmp1 = split_arg[0]
@@ -113,37 +119,54 @@ def equal(BashHandler, args, argf=[]):
         return args == argf
 
 
-def expect(BashHandler, search_string_and_timeout):
+def expect(bash_handler, search_string_and_timeout):
+    """Check expected output comes with timeout.
+
+    Args:
+        bash_handler (BashMetaHandler): BashMetaHandler to use
+        search_string_and_timeout (string): string of searchstring and timeout spareted by comma
+
+    Returns:
+        Any: whether expected strings found in timeout time
+    """
     # print(f"Start expect without")
     spl = search_string_and_timeout.split(",")
     search_string = spl[0]
     if search_string[0] == '"' and search_string[len(search_string) - 1] == '"':
         search_string = search_string[1 : len(search_string) - 1]
 
-    if check(BashHandler, search_string):
+    if check(bash_handler, search_string):
         return True
-    # print(BashHandler.history)
+    # print(bash_handler.history)
 
     timeout = 5
 
     if len(spl) > 1:
         timeout = int(spl[1])
     try:
-        BashHandler.bash.expect(search_string, timeout)
-    except:
-        raise
+        bash_handler.bash.expect(search_string, timeout)
+    except BaseException:
         return False
     return True
 
 
-def expect_check(BashHandler, search_string_and_timeout):
+def expect_check(bash_handler, search_string_and_timeout):
+    """Check expected output comes with timeout keeping the gotten lines.
+
+    Args:
+        bash_handler (BashMetaHandler): BashMetaHandler to use
+        search_string_and_timeout (string): string of searchstring and timeout spareted by comma
+
+    Returns:
+        Any: whether expected strings found in timeout time
+    """
     print("entered expect_check")
     spl = search_string_and_timeout.split(",")
     search_string = spl[0]
     if search_string[0] == '"' and search_string[len(search_string) - 1] == '"':
         search_string = search_string[1 : len(search_string) - 1]
 
-    if check(BashHandler, search_string):
+    if check(bash_handler, search_string):
         return True
 
     timeout = 5
@@ -159,13 +182,13 @@ def expect_check(BashHandler, search_string_and_timeout):
     print(time_dif)
     while time_dif.seconds + 1e-6 * time_dif.microseconds < timeout:
         # print(f"timedif: {time_dif.seconds+1e-6*time_dif.microseconds}")
-        nwLines = getlines(BashHandler.bash)
-        if nwLines != None:
-            print(f"nwLines: {nwLines}")
+        nw_lines = getlines(bash_handler.bash)
+        if nw_lines is not None:
+            print(f"nw_lines: {nw_lines}")
 
-        if nwLines != None:
-            BashHandler.history = [*BashHandler.history, *nwLines]
-            if check(BashHandler, search_string):
+        if nw_lines is not None:
+            bash_handler.history = [*bash_handler.history, *nw_lines]
+            if check(bash_handler, search_string):
                 return True
         time.sleep(0.01)
         time_dif = datetime.datetime.now() - start_time
@@ -173,6 +196,14 @@ def expect_check(BashHandler, search_string_and_timeout):
 
 
 def getlines(child):
+    """Get nonblocking lines.
+
+    Args:
+        child (pexpect.pty_spawn.spawn): terminal object
+
+    Returns:
+        list: string list of gotten lines
+    """
     lines = []
     l_str = ""
     while True:
@@ -188,29 +219,54 @@ def getlines(child):
     return lines
 
 
-def get_input(BashHandler, text):
+def get_input(bash_handler, text):
+    """Get user input.
+
+    Args:
+        bash_handler (BashMetaHandler): BashMetaHandler to be used
+        text (str): string to write when input is used
+
+    Returns:
+        str: return input string
+    """
     if text == "":
         return input()
     else:
         return input(text)
 
 
-def println(BashHandler, text):
+def println(bash_handler, text):
+    """Print on screen.
+
+    Args:
+        bash_handler (BashMetaHandler): BashMetaHandler to be used
+        text (str): string to write
+
+    Returns:
+        bool: True always
+    """
     print(text)
     return True
 
 
-def wait(BashHandler, timeout):
+def wait(bash_handler, timeout):
+    """Wait function waits seconds.
 
+    Args:
+        bash_handler (BashMetaHandler): _description_
+        timeout (Any): something converts to float [s]
+    """
     time.sleep(float(timeout))
 
 
-class metaBashHandler:
+class MetaBashHandler:
+    """Class Handles the interaction with a terminal via meta bash script."""
+
     def __init__(
         self,
         filename="",
-        variableDict={},
-        functionDict={
+        variable_dict={},
+        function_dict={
             "println": println,
             "print": println,
             "check": check,
@@ -221,116 +277,149 @@ class metaBashHandler:
             "equal": equal,
         },
     ):
+        """Initiation for the MetaBashHandler class.
+
+        Args:
+            filename (str, optional): metabash filename. Defaults to "".
+            variable_dict (dict, optional): dictionary of variables keys are the variable names. Defaults to {}.
+            function_dict (dict, optional): dictionary of functions keys are the function names. Defaults to { "println": println, "print": println, "check": check, "wait": wait, "expect": expect_check, "input": get_input, "not": do_not, "equal": equal, }.
+        """
         self.filename = filename
         self.gotoDict = {}
-        self.variableDict = variableDict
-        self.functionDict = functionDict
+        self.variable_dict = variable_dict
+        self.function_dict = function_dict
         self.lines = []
         self.bash = None
         self.history = []
         if filename != "":
-            self.readFile(filename)
+            self.read_file(filename)
 
-    def newBash(self):
-        if self.bash != None:
+    def new_bash(self):
+        """Generates a new bash terminal."""
+        if self.bash is not None:
             self.bash.close()
         self.bash = pexpect.spawn('/bin/bash"')
         self.history = []
 
-    def giveVariables(self, variableDict={}):
-        self.variableDict = variableDict
+    def give_variables(self, variable_dict={}):
+        """Gives the Handler a new variable dictionary.
 
-    def callFunc(self, line, iLine):
+        Args:
+            variable_dict (dict, optional): new variable dictionary. Defaults to {}.
+        """
+        self.variable_dict = variable_dict
+
+    def call_func(self, line, i_line):
+        """Funciton for calling a function executed internally.
+
+        Raises:
+            BaseException: if the functions isn't a real fuctions or an error occured
+
+
+        Args:
+            line (str): function line to be called
+            i_line (int): Line where its called when not known -1
+
+        Returns:
+            Any: result of function when invalid a dictionary {"functincallfailed": -1}
+        """
         # checkfunc
-        iF = line.find("(")
+        i_f = line.find("(")
         # print(f"func_line = {line}")
-        if iF != -1:
+        if i_f != -1:
             try:
-                iL = line.rfind(")")
-                func_arg = line[iF + 1 : iL]
+                i_l = line.rfind(")")
+                func_arg = line[i_f + 1 : i_l]
                 func_arg = func_arg.strip()
-                func_name = line[0:iF]
+                func_name = line[0:i_f]
                 func_names = []
 
                 # check func_arg has functions
-                iLast = func_arg.find("(")
-                if iLast != -1:
-                    iLast = 0
-                    iBegin = 0
-                    iB = 0
+                i_last = func_arg.find("(")
+                if i_last != -1:
+                    i_last = 0
+                    i_begin = 0
+                    i_b = 0
 
                     func_args = []
                     results = []
-                    iStart = 0
+                    i_start = 0
                     # print(f"func_arg {func_arg}")
 
-                    while iB >= 0:
-                        iOpen = func_arg.find("(", iLast + 1)
-                        iClose = func_arg.find(")", iLast + 1)
-                        iQuotes = func_arg.find('"', iLast + 1)
-                        iComma = func_arg.find(",", iLast + 1)
+                    while i_b >= 0:
+                        i_open = func_arg.find("(", i_last + 1)
+                        i_close = func_arg.find(")", i_last + 1)
+                        i_quotes = func_arg.find('"', i_last + 1)
+                        i_comma = func_arg.find(",", i_last + 1)
                         if (
-                            (iOpen < iClose or iClose == -1)
-                            and (iOpen < iQuotes or iQuotes == -1)
-                            and (iOpen < iComma or iComma == -1)
-                            and iOpen != -1
+                            (i_open < i_close or i_close == -1)
+                            and (i_open < i_quotes or i_quotes == -1)
+                            and (i_open < i_comma or i_comma == -1)
+                            and i_open != -1
                         ):
-                            iLast = iOpen
-                            if iB == 0:
-                                iBegin = iLast + 1
-                            iB = iB + 1
+                            i_last = i_open
+                            if i_b == 0:
+                                i_begin = i_last + 1
+                            i_b = i_b + 1
                             continue
                         elif (
-                            (iClose < iOpen or iOpen == -1)
-                            and (iClose < iQuotes or iQuotes == -1)
-                            and (iClose < iComma or iComma == -1)
-                            and iClose != -1
+                            (i_close < i_open or i_open == -1)
+                            and (i_close < i_quotes or i_quotes == -1)
+                            and (i_close < i_comma or i_comma == -1)
+                            and i_close != -1
                         ):
-                            iB = iB - 1
-                            iLast = iClose
-                            if iB == 0:
-                                func_args.append(func_arg[iBegin:iClose])
-                                func_names.append(func_arg[iStart : iBegin - 1].strip())
-                                iComma_arg = func_arg.find(",", iLast + 1)
-                                if iComma_arg == -1:
+                            i_b = i_b - 1
+                            i_last = i_close
+                            if i_b == 0:
+                                func_args.append(func_arg[i_begin:i_close])
+                                func_names.append(
+                                    func_arg[i_start : i_begin - 1].strip()
+                                )
+                                i_comma_arg = func_arg.find(",", i_last + 1)
+                                if i_comma_arg == -1:
                                     break
                                 else:
-                                    iBegin = iComma_arg + 1
-                                    iLast = iComma_arg + 1
+                                    i_begin = i_comma_arg + 1
+                                    i_last = i_comma_arg + 1
                             continue
                         elif (
-                            (iQuotes < iOpen or iOpen == -1)
-                            and (iQuotes < iClose or iClose == -1)
-                            and (iQuotes < iComma or iComma == -1)
-                            and iQuotes != -1
+                            (i_quotes < i_open or i_open == -1)
+                            and (i_quotes < i_close or i_close == -1)
+                            and (i_quotes < i_comma or i_comma == -1)
+                            and i_quotes != -1
                         ):
-                            iQuotes = func_arg.find('"', iQuotes + 1)
-                            iLast = iQuotes
+                            i_quotes = func_arg.find('"', i_quotes + 1)
+                            i_last = i_quotes
                         elif (
-                            (iComma < iClose or iClose == -1)
-                            and (iComma < iOpen or iOpen == -1)
-                            and (iComma < iQuotes or iQuotes == -1)
-                            and iComma != -1
+                            (i_comma < i_close or i_close == -1)
+                            and (i_comma < i_open or i_open == -1)
+                            and (i_comma < i_quotes or i_quotes == -1)
+                            and i_comma != -1
                         ):
-                            if iB == 0:  # when in first loop
-                                func_args.append(func_arg[iStart:iComma].strip())
+                            if i_b == 0:  # when in first loop
+                                func_args.append(func_arg[i_start:i_comma].strip())
                                 func_names.append(None)
-                                iStart = iComma + 1
-                            iLast = iComma
+                                i_start = i_comma + 1
+                            i_last = i_comma
 
                         else:
-                            print(f"iOpen: {iOpen},iClose: {iClose},iQuotes: {iQuotes}")
+                            print(
+                                f"i_open: {i_open},i_close: {i_close},i_quotes: {i_quotes}"
+                            )
                             print("false Quote Handling")
                             raise
                     # print(f"func_names: {func_names}\nfunc_args:{func_args}")
-                    for iInFunc in range(len(func_names)):
-                        if func_names[iInFunc] != None:
-                            res = self.callFunc(
-                                func_names[iInFunc] + "(" + func_args[iInFunc] + ")",
-                                iLine,
+                    for i_in_func in range(len(func_names)):
+                        if func_names[i_in_func] is not None:
+                            res = self.call_func(
+                                func_names[i_in_func]
+                                + "("
+                                + func_args[i_in_func]
+                                + ")",
+                                i_line,
                             )
                         else:
-                            res = func_args[iInFunc]
+                            res = func_args[i_in_func]
                         results.append(res)
 
                     # print(f"results: {results}")
@@ -338,219 +427,237 @@ class metaBashHandler:
                 # print(f"should execute {func_name}(f{func_arg})")
 
                 # print(f"check 1 funcname:{func_name}")
-                # print(f"functionDict2: {self.functionDict}")
-                # print(f"check Func: {self.functionDict[func_name]}")
+                # print(f"function_dict2: {self.function_dict}")
+                # print(f"check Func: {self.function_dict[func_name]}")
                 if func_names == []:
-                    res = self.functionDict[func_name](self, func_arg)
+                    res = self.function_dict[func_name](self, func_arg)
                 else:
-                    print(f"functionDict:[{func_name}](self,*{results})")
-                    res = self.functionDict[func_name](self, *results)
-            except:
+                    print(f"function_dict:[{func_name}](self,*{results})")
+                    res = self.function_dict[func_name](self, *results)
+            except BaseException:
                 print(
-                    f"({iLine+1}) function {func_name}({func_arg}) not executed properly"
+                    f"({i_line+1}) function {func_name}({func_arg}) not executed properly"
                 )
                 # raise
                 return {"functincallfailed": -1}
                 res = True
             return res
 
-    def executeFile(self, filename=""):
-        if self.filename == "":
-            self.readFile(filename)
-        if self.bash == None:
-            self.newBash()
+    def execute_file(self, filename=""):
+        """Executed the given file when not given takes the set filename.
 
-        iLine = 0
-        iDepth = 0
-        funcCallList = []
+        Raises:
+            BaseException: any line could not be executed
+
+        Args:
+            filename (str, optional): filename to be used. Defaults to "".
+        """
+        if self.filename == "":
+            self.read_file(filename)
+        if self.bash is None:
+            self.new_bash()
+
+        i_line = 0
+        i_depth = 0
+        func_call_list = []
         conditional_terms = ["if", "else", "elif", "else", "while"]
         last_while = -1
 
-        while iLine < len(self.lines):
+        while i_line < len(self.lines):
             # check new incomming lines
-            nwLines = getlines(self.bash)
-            if nwLines != None:
-                print(f"nwLines: {nwLines}")
-            # if nwLines != None: print(f"funcCallList: {funcCallList}")
+            nw_lines = getlines(self.bash)
+            if nw_lines is not None:
+                print(f"nw_lines: {nw_lines}")
+            # if nw_lines is not None: print(f"func_call_list: {func_call_list}")
 
-            if nwLines != None:
-                self.history = [*self.history, *nwLines]
-            line = self.lines[iLine]
+            if nw_lines is not None:
+                self.history = [*self.history, *nw_lines]
+            line = self.lines[i_line]
             line = line.replace("\n", "").replace("\r", "")
 
             # variable
-            iF = line.find("$(")
-            while iF != -1:
-                iL = line.find(")")
-                var = line[iF : iL + 1]
+            i_f = line.find("$(")
+            while i_f != -1:
+                i_l = line.find(")")
+                var = line[i_f : i_l + 1]
                 print(f"line = {line}")
                 try:
-                    line = line.replace(var, self.variableDict[var[2 : len(var) - 1]])
-                except:
-                    print(f"variable = {var} not in dict {self.variableDict}")
+                    line = line.replace(var, self.variable_dict[var[2 : len(var) - 1]])
+                except BaseException:
+                    print(f"variable = {var} not in dict {self.variable_dict}")
                     raise
-                iF = line.find("$(")
-            lred = line.replace("\n", "").replace("\r", "")
+                i_f = line.find("$(")
+            # lred = line.replace("\n", "").replace("\r", "")
 
-            # print(f"(f) {funcCallList}")
+            # print(f"(f) {func_call_list}")
 
             # empty line check
             if line.replace("\t", "").replace(" ", "") != "":
 
                 # check same DepthLevel
-                realDepth = 0
+                real_depth = 0
                 for i in range(len(line)):
                     if line[i] == "\t":
-                        realDepth = realDepth + 1
+                        real_depth = real_depth + 1
                     else:
                         break
 
-                line = line[realDepth : len(line)]
+                line = line[real_depth : len(line)]
                 l_spl = line.split(" ")
 
                 if l_spl[0][len(l_spl[0]) - 1] == ":":
-                    iLine = iLine + 1
+                    i_line = i_line + 1
                     continue
 
                 # check Depth
-                if realDepth == iDepth:
+                if real_depth == i_depth:
                     # isnormal
-                    # print(f'goforward: {line}, realDepth: {realDepth}')
+                    # print(f'goforward: {line}, real_depth: {real_depth}')
                     print("", end="")
-                elif realDepth < iDepth:
-                    lastCall = funcCallList.pop()
-                    # print(f"lastCall: {lastCall}")
+                elif real_depth < i_depth:
+                    last_call = func_call_list.pop()
+                    # print(f"last_call: {last_call}")
                     # print(f'l_spl = {l_spl[0]=="else"}')
-                    if lastCall == "if" or lastCall == "elif":
-                        iL = iLine + 1
+                    if last_call == "if" or last_call == "elif":
+                        i_l = i_line + 1
                         # print(f'l_spl = "{l_spl[0]}"')
                         # print(f'l_spl = {l_spl[0]=="else"}')
                         while l_spl[0] == "else" or l_spl[0] == "elif":
                             # print(f"l_spl = {l_spl[0]}")
-                            # print(f"viewline: {self.lines[iL]}")
-                            while self.lines[iL][realDepth] == "\t":
-                                iL = iL + 1
-                                # print(f"({iLine+1})skipped")
-                            l_spl = self.lines[iL][
-                                realDepth : len(self.lines[iL])
+                            # print(f"viewline: {self.lines[i_l]}")
+                            while self.lines[i_l][real_depth] == "\t":
+                                i_l = i_l + 1
+                                # print(f"({i_line+1})skipped")
+                            l_spl = self.lines[i_l][
+                                real_depth : len(self.lines[i_l])
                             ].split(" ")
-                        iLine = iL
-                        iDepth = realDepth
+                        i_line = i_l
+                        i_depth = real_depth
                         continue
-                    elif lastCall == "while":
+                    elif last_call == "while":
                         # print(f"jump to line {last_while}")
-                        iLine = last_while
-                        iDepth = iDepth - 1
+                        i_line = last_while
+                        i_depth = i_depth - 1
                         continue
-                    elif lastCall == "else":
-                        iDepth = realDepth
+                    elif last_call == "else":
+                        i_depth = real_depth
                         continue
                     else:
-                        print(f"({iLine+1}) - parsing error {lastCall} not known")
-                    # print(f"setDepth: {realDepth}")
-                    iDepth = realDepth
+                        print(f"({i_line+1}) - parsing error {last_call} not known")
+                    # print(f"setDepth: {real_depth}")
+                    i_depth = real_depth
                 else:
-                    print(f"({iLine+1}) - parsing error false tab usage")
-                    print(f"realDepth: {realDepth}, iDepth: {iDepth}")
+                    print(f"({i_line+1}) - parsing error false tab usage")
+                    print(f"real_depth: {real_depth}, i_depth: {i_depth}")
                     raise
 
                 # checkif
-                iL = iLine
+                i_l = i_line
                 if l_spl[0] in conditional_terms:
 
                     go_into = True
                     while l_spl[0] in conditional_terms:
                         if l_spl[0] == "if" or l_spl[0] == "elif":
-                            if self.callFunc(
-                                line[len(l_spl[0]) + 1 : len(line)], iLine
+                            if self.call_func(
+                                line[len(l_spl[0]) + 1 : len(line)], i_line
                             ):
-                                iL = iL + 1
+                                i_l = i_l + 1
                                 break
                             else:
-                                iL = iL + 1
-                                # print(f"d - iDepth {iDepth} <{self.lines[iL][iDepth]}>")
-                                while self.lines[iL][iDepth] == "\t":
-                                    iL = iL + 1
-                                    # print("d - "+self.lines[iL])
-                                l_spl = self.lines[iL][
-                                    iDepth : len(self.lines[iL])
+                                i_l = i_l + 1
+                                # print(f"d - i_depth {i_depth} <{self.lines[i_l][i_depth]}>")
+                                while self.lines[i_l][i_depth] == "\t":
+                                    i_l = i_l + 1
+                                    # print("d - "+self.lines[i_l])
+                                l_spl = self.lines[i_l][
+                                    i_depth : len(self.lines[i_l])
                                 ].split(" ")
                                 # print(l_spl)
                         elif l_spl[0] == "while":
-                            if self.callFunc(
-                                line[len(l_spl[0]) + 1 : len(line)], iLine
+                            if self.call_func(
+                                line[len(l_spl[0]) + 1 : len(line)], i_line
                             ):
-                                last_while = iL
-                                iL = iL + 1
+                                last_while = i_l
+                                i_l = i_l + 1
                                 break
                             else:
-                                iL = iL + 1
-                                # print(f"iDepth: {iDepth}")
-                                while self.lines[iL][iDepth] == "\t":
-                                    iL = iL + 1
-                                # print(f"jump to line {iL+1}")
+                                i_l = i_l + 1
+                                # print(f"i_depth: {i_depth}")
+                                while self.lines[i_l][i_depth] == "\t":
+                                    i_l = i_l + 1
+                                # print(f"jump to line {i_l+1}")
                                 go_into = False
                                 break
                         else:
-                            iL = iLine + 1
+                            i_l = i_line + 1
                             break
                     # if l_spl[0] == "if" or l_spl[0] == "elif" or l_spl[0] == "else":
                     # print("funcCall: "+l_spl[0].replace("\n","").replace("\r",""))
                     if go_into:
-                        funcCallList.append(
+                        func_call_list.append(
                             l_spl[0].replace("\n", "").replace("\r", "")
                         )
-                        iDepth = iDepth + 1
-                    iLine = iL
-                    # print(f"enterred {l_spl[0]} with Depth: {iDepth}")
+                        i_depth = i_depth + 1
+                    i_line = i_l
+                    # print(f"enterred {l_spl[0]} with Depth: {i_depth}")
                     continue
 
                 # check break
                 if l_spl[0] == "break":
-                    iL = iLine + 1
-                    rev_funcCallList = funcCallList[::-1]
-                    r_index = len(rev_funcCallList) - rev_funcCallList.index("while")
-                    while self.lines[iL][r_index - 1] == "\t":
-                        iL = iL + 1
-                    iLine = iL
+                    i_l = i_line + 1
+                    rev_func_call_list = func_call_list[::-1]
+                    r_index = len(rev_func_call_list) - rev_func_call_list.index(
+                        "while"
+                    )
+                    while self.lines[i_l][r_index - 1] == "\t":
+                        i_l = i_l + 1
+                    i_line = i_l
                     continue
 
                 print(f"(e) {line}")
 
                 # checkfunc
-                iF = line.find("(")
+                i_f = line.find("(")
                 # print(line)
-                if iF != -1:
-                    iL = line.rfind(")")
-                    func_arg = line[iF + 1 : iL]
-                    func_name = line[0:iF]
+                if i_f != -1:
+                    i_l = line.rfind(")")
+                    func_arg = line[i_f + 1 : i_l]
+                    func_name = line[0:i_f]
 
                     if func_name == "goto":
-                        iLine = self.gotoDict[func_arg]
-                        iDepth = 0
-                        funcCallList = []
+                        i_line = self.gotoDict[func_arg]
+                        i_depth = 0
+                        func_call_list = []
                         continue
                     else:
                         # print(f"should execute {func_name}({func_arg})")
-                        ret = self.callFunc(line, iLine)
+                        ret = self.call_func(line, i_line)
                         if str(ret.__class__) == "<class 'dict'>":
                             if "functincallfailed" in ret.keys():
                                 self.bash.sendline(line)
-                        iLine = iLine + 1
+                        i_line = i_line + 1
                         continue
 
                 # print(f"line = {line}")
                 self.bash.sendline(line)
 
-            iLine = iLine + 1
-        nwLines = getlines(self.bash)
-        print(f"nwLines: {nwLines}")
-        if nwLines != None:
-            self.history = [*self.history, *nwLines]
+            i_line = i_line + 1
+        nw_lines = getlines(self.bash)
+        print(f"nw_lines: {nw_lines}")
+        if nw_lines is not None:
+            self.history = [*self.history, *nw_lines]
         for line in self.history:
             print(line)
 
-    def readFile(self, filename):
+    def read_file(self, filename):
+        """Read in file and setup for executing the script.
+
+        Raises:
+            BaseException: triggers if file was not Found
+
+        Args:
+            filename (str): name of file
+        """
         if filename == "":
             raise
         else:
@@ -558,23 +665,23 @@ class metaBashHandler:
 
             try:
                 doc = open(filename)
-            except:
+            except BaseException:
                 print(f"(e) failed to open {filename}")
 
             # read in the goto files
             self.lines = doc.readlines()
             self.gotoDict["end"] = len(self.lines)
 
-            for iLine in range(len(self.lines)):
-                line = self.lines[iLine]
+            for i_line in range(len(self.lines)):
+                line = self.lines[i_line]
                 line = line.replace("\n", "").replace("\r", "")
                 l_sp = line.split(" ")
-                # print(f"iLine = {iLine+1}")
+                # print(f"i_line = {i_line+1}")
                 # print(f"line = {line}")
                 # print(f"l_sp[0] = {l_sp[0]}")
                 if len(l_sp[0]) == 0:
                     continue
                 if l_sp[0][len(l_sp[0]) - 1] == ":":
-                    self.gotoDict[l_sp[0][0 : len(l_sp[0]) - 1]] = iLine
+                    self.gotoDict[l_sp[0][0 : len(l_sp[0]) - 1]] = i_line
 
             # print(self.gotoDict)
