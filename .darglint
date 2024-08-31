@@ -1,3 +1,2 @@
 [darglint]
 strictness = long
-docstring_style=sphinx

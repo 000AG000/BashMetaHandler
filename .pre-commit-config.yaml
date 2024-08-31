@@ -24,7 +24,7 @@ repos:
       - id: darglint
         name: darglint
         entry: darglint
-        exclude: ^*test_env/lib/python3.10/site-packages/*
+        exclude: ^$|test_env/lib/python3.10/*
         language: system
         types: [python]
         stages: [manual]
@@ -37,6 +37,7 @@ repos:
       - id: flake8
         name: flake8
         entry: flake8
+        exclude: ^$|test_env/lib/python3.10/*
         language: system
         types: [python]
         require_serial: true
