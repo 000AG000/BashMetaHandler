@@ -1,4 +1,4 @@
-#!/home/work/Dokumente/Projects/BashMetaHandler/BashMetaHandler/test_env/bin/python3
+#!/home/work/Dokumente/Projects/BashMetaHandler/BashMetaHandler/test_env/bin/python3.10
 import re
 import sys
 

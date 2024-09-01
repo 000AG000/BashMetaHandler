@@ -1,262 +1,10 @@
 """start of main script of bash meta handler!"""
 import datetime
 import time
+import typing
+from typing import Union
 
 import pexpect  # type: ignore
-
-
-def check(bash_handler, search_string):
-    """Check function for MetaBashHandler checks whether string is found in gotten line.
-
-    Args:
-        bash_handler (MetaBashHandler): MetaBashHandler used
-        search_string (string): search string
-
-    Returns:
-        boolean: whether
-    """
-    # if str(search_string.__class__) != "<class 'str'>":
-    # 	search_string = str(search_string)
-    if search_string[0] == '"' and search_string[len(search_string) - 1] == '"':
-        search_string = search_string[1 : len(search_string) - 1]
-    # print(f"history: {bash_handler.history}")
-    # print(f"l = \
-    # {bash_handler.history[len(bash_handler.history)-1].find(search_string)}")
-    for i_k in range(2):
-        # print(f"i_k = {i_k}")
-        if len(bash_handler.history) - 1 - i_k >= 0:
-            i = bash_handler.history[len(bash_handler.history) - 1 - i_k].find(
-                search_string
-            )
-            # print(f"{bash_handler.history[len(bash_handler.history)-1-i_k]} - \
-            # {search_string},\
-            # {bash_handler.history[len(bash_handler.history)-1-i_k].__class__}\
-            #  - {search_string.__class__}\n i = {i}")
-            # print(f"len: {len(bash_handler.history)}, index: \
-            # {len(bash_handler.history)-1-i}")
-            if i != -1:
-                # print(f"last: {bash_handler.history[\
-                # len(bash_handler.history)-1-i_k]}")
-                print(
-                    f" {search_string} found in {bash_handler.history[len(bash_handler.history)-1-i_k]}"
-                )
-
-                return True
-            print(
-                f" {search_string} not found in {bash_handler.history[len(bash_handler.history)-i_k-1]}"
-            )
-    return False
-
-
-def do_not(bash_handler, b):
-    """Return inverse.
-
-    Args:
-        bash_handler (BashMetaHandler): BashMetaHandler (not used)
-        b (boolean or string): input to take inverse
-
-    Returns:
-        boolean: invsers
-    """
-    if b == "True":
-        b = True
-    elif b == "False":
-        b = False
-    return not b
-
-
-def equal(bash_handler, args, argf=[]):
-    """Check whether arguemtns arge equal.
-
-    Args:
-        bash_handler (BashMetaHandler): BashMetaHandler to be used
-        args (list or string): first comparison or list of to arguments to be compared
-        argf (list, optional): second comparispyon. Defaults to [].
-
-    Returns:
-        boolean: returns whether equal
-    """
-    if argf == []:
-        split_arg = args.split(",", 1)
-
-        if split_arg[1].find("(") != 0 and (
-            split_arg[1][0] != '"' and split_arg[1][len(split_arg[1]) - 1] != '"'
-        ):
-            try:
-                ret = bash_handler.call_func(split_arg[1], -1)
-                cmp1 = str(ret)
-            except BaseException:
-                cmp1 = split_arg[1]
-        else:
-            cmp1 = split_arg[1]
-
-        if split_arg[0].find("(") != 0 and (
-            split_arg[0][0] != '"' and split_arg[0][len(split_arg[0]) - 1] != '"'
-        ):
-            try:
-                ret = bash_handler.call_func(split_arg[0], -1)
-                cmp0 = str(ret)
-            except BaseException:
-                cmp0 = split_arg[0]
-        else:
-            cmp1 = split_arg[0]
-
-        if cmp0[0] == '"' and cmp0[len(cmp0) - 1] == '"' and len(cmp0) > 2:
-            cmp0 = cmp0[1 : len(cmp0) - 1]
-
-        if cmp1[0] == '"' and cmp1[len(cmp1) - 1] == '"' and len(cmp1) > 2:
-            cmp1 = cmp1[1 : len(cmp1 - 1)]
-
-        print(f"comparing {cmp0} and {cmp1}")
-
-        return cmp0 == cmp1
-    else:
-        if args[0] == '"' and args[len(args) - 1] == '"' and len(args) > 2:
-            args = args[1 : len(args) - 1]
-
-        if argf[0] == '"' and argf[len(argf) - 1] == '"' and len(argf) > 2:
-            argf = argf[1 : len(argf - 1)]
-        return args == argf
-
-
-def expect(bash_handler, search_string_and_timeout):
-    """Check expected output comes with timeout.
-
-    Args:
-        bash_handler (BashMetaHandler): BashMetaHandler to use
-        search_string_and_timeout (string): string of searchstring and timeout spareted by comma
-
-    Returns:
-        Any: whether expected strings found in timeout time
-    """
-    # print(f"Start expect without")
-    spl = search_string_and_timeout.split(",")
-    search_string = spl[0]
-    if search_string[0] == '"' and search_string[len(search_string) - 1] == '"':
-        search_string = search_string[1 : len(search_string) - 1]
-
-    if check(bash_handler, search_string):
-        return True
-    # print(bash_handler.history)
-
-    timeout = 5
-
-    if len(spl) > 1:
-        timeout = int(spl[1])
-    try:
-        bash_handler.bash.expect(search_string, timeout)
-    except BaseException:
-        return False
-    return True
-
-
-def expect_check(bash_handler, search_string_and_timeout):
-    """Check expected output comes with timeout keeping the gotten lines.
-
-    Args:
-        bash_handler (BashMetaHandler): BashMetaHandler to use
-        search_string_and_timeout (string): string of searchstring and timeout spareted by comma
-
-    Returns:
-        Any: whether expected strings found in timeout time
-    """
-    print("entered expect_check")
-    spl = search_string_and_timeout.split(",")
-    search_string = spl[0]
-    if search_string[0] == '"' and search_string[len(search_string) - 1] == '"':
-        search_string = search_string[1 : len(search_string) - 1]
-
-    if check(bash_handler, search_string):
-        return True
-
-    timeout = 5
-
-    if len(spl) > 1:
-        timeout = int(spl[1])
-
-    start_time = datetime.datetime.now()
-    end_time = datetime.datetime.now()
-
-    time_dif = end_time - start_time
-    # print(f"timedif: {time_dif.seconds},{time_dif.microseconds}")
-    print(time_dif)
-    while time_dif.seconds + 1e-6 * time_dif.microseconds < timeout:
-        # print(f"timedif: {time_dif.seconds+1e-6*time_dif.microseconds}")
-        nw_lines = getlines(bash_handler.bash)
-        if nw_lines is not None:
-            print(f"nw_lines: {nw_lines}")
-
-        if nw_lines is not None:
-            bash_handler.history = [*bash_handler.history, *nw_lines]
-            if check(bash_handler, search_string):
-                return True
-        time.sleep(0.01)
-        time_dif = datetime.datetime.now() - start_time
-    return False
-
-
-def getlines(child):
-    """Get nonblocking lines.
-
-    Args:
-        child (pexpect.pty_spawn.spawn): terminal object
-
-    Returns:
-        list: string list of gotten lines
-    """
-    lines = []
-    l_str = ""
-    while True:
-        try:
-            character = child.read_nonblocking(timeout=0.1)
-            l_str += character.decode()
-        except pexpect.exceptions.TIMEOUT:
-            break
-
-    lines = l_str.replace("\r", "").split("\n")
-    if lines == [""]:
-        return None
-    return lines
-
-
-def get_input(bash_handler, text):
-    """Get user input.
-
-    Args:
-        bash_handler (BashMetaHandler): BashMetaHandler to be used
-        text (str): string to write when input is used
-
-    Returns:
-        str: return input string
-    """
-    if text == "":
-        return input()
-    else:
-        return input(text)
-
-
-def println(bash_handler, text):
-    """Print on screen.
-
-    Args:
-        bash_handler (BashMetaHandler): BashMetaHandler to be used
-        text (str): string to write
-
-    Returns:
-        bool: True always
-    """
-    print(text)
-    return True
-
-
-def wait(bash_handler, timeout):
-    """Wait function waits seconds.
-
-    Args:
-        bash_handler (BashMetaHandler): _description_
-        timeout (Any): something converts to float [s]
-    """
-    time.sleep(float(timeout))
 
 
 class MetaBashHandler:
@@ -264,18 +12,9 @@ class MetaBashHandler:
 
     def __init__(
         self,
-        filename="",
-        variable_dict={},
-        function_dict={
-            "println": println,
-            "print": println,
-            "check": check,
-            "wait": wait,
-            "expect": expect_check,
-            "input": get_input,
-            "not": do_not,
-            "equal": equal,
-        },
+        filename: str = "",
+        variable_dict: typing.Dict[str, typing.Any] = {},
+        function_dict: typing.Dict[str, Union[typing.Callable[..., typing.Any], None]] = {},
     ):
         """Initiation for the MetaBashHandler class.
 
@@ -284,24 +23,37 @@ class MetaBashHandler:
             variable_dict (dict, optional): dictionary of variables keys are the variable names. Defaults to {}.
             function_dict (dict, optional): dictionary of functions keys are the function names. Defaults to { "println": println, "print": println, "check": check, "wait": wait, "expect": expect_check, "input": get_input, "not": do_not, "equal": equal, }.
         """
+
+        if function_dict == {}:
+            function_dict = {
+                "println": println,
+                "print": println,
+                "check": check,
+                "wait": wait,
+                "expect": expect_check,
+                "input": get_input,
+                "not": do_not,
+                "equal": equal,
+            }
+
         self.filename = filename
-        self.gotoDict = {}
+        self.gotoDict: typing.Dict[str, Union[int, None]] = {}
         self.variable_dict = variable_dict
         self.function_dict = function_dict
-        self.lines = []
-        self.bash = None
-        self.history = []
+        self.lines: typing.List[str] = []
+        self.bash: Union[None, pexpect.pty_spawn.spawn] = None
+        self.history: typing.List[str] = []
         if filename != "":
             self.read_file(filename)
 
-    def new_bash(self):
+    def new_bash(self) -> None:
         """Generates a new bash terminal."""
         if self.bash is not None:
             self.bash.close()
         self.bash = pexpect.spawn('/bin/bash"')
         self.history = []
 
-    def give_variables(self, variable_dict={}):
+    def give_variables(self, variable_dict: typing.Dict[str, typing.Any] = {}) -> None:
         """Gives the Handler a new variable dictionary.
 
         Args:
@@ -309,7 +61,7 @@ class MetaBashHandler:
         """
         self.variable_dict = variable_dict
 
-    def call_func(self, line, i_line):
+    def call_func(self, line: str, i_line: int) -> typing.Any:
         """Funciton for calling a function executed internally.
 
         Raises:
@@ -334,7 +86,7 @@ class MetaBashHandler:
                 func_arg = line[i_f + 1 : i_l]
                 func_arg = func_arg.strip()
                 func_name = line[0:i_f]
-                func_names = []
+                func_names: typing.List[typing.Any] = []
 
                 # check func_arg has functions
                 i_last = func_arg.find("(")
@@ -432,20 +184,20 @@ class MetaBashHandler:
                 # print(f"function_dict2: {self.function_dict}")
                 # print(f"check Func: {self.function_dict[func_name]}")
                 if func_names == []:
-                    res = self.function_dict[func_name](self, func_arg)
+                    res = self.function_dict[func_name](self, func_arg)  # type: ignore
                 else:
                     print(f"function_dict:[{func_name}](self,*{results})")
-                    res = self.function_dict[func_name](self, *results)
+                    res = self.function_dict[func_name](self, *results)  # type: ignore
             except BaseException:
                 print(
                     f"({i_line+1}) function {func_name}({func_arg}) not executed properly"
                 )
                 # raise
                 return {"functincallfailed": -1}
-                res = True
+                # res = True
             return res
 
-    def execute_file(self, filename=""):
+    def execute_file(self, filename: str = "") -> None:
         """Executed the given file when not given takes the set filename.
 
         Raises:
@@ -461,7 +213,7 @@ class MetaBashHandler:
 
         i_line = 0
         i_depth = 0
-        func_call_list = []
+        func_call_list: typing.List[str] = []
         conditional_terms = ["if", "else", "elif", "else", "while"]
         last_while = -1
 
@@ -474,7 +226,7 @@ class MetaBashHandler:
 
             if nw_lines is not None:
                 self.history = [*self.history, *nw_lines]
-            line = self.lines[i_line]
+            line: str = self.lines[i_line]
             line = line.replace("\n", "").replace("\r", "")
 
             # variable
@@ -495,7 +247,6 @@ class MetaBashHandler:
 
             # empty line check
             if line.replace("\t", "").replace(" ", "") != "":
-
                 # check same DepthLevel
                 real_depth = 0
                 for i in range(len(line)):
@@ -556,7 +307,6 @@ class MetaBashHandler:
                 # checkif
                 i_l = i_line
                 if l_spl[0] in conditional_terms:
-
                     go_into = True
                     while l_spl[0] in conditional_terms:
                         if l_spl[0] == "if" or l_spl[0] == "elif":
@@ -627,7 +377,7 @@ class MetaBashHandler:
                     func_name = line[0:i_f]
 
                     if func_name == "goto":
-                        i_line = self.gotoDict[func_arg]
+                        i_line = self.gotoDict[func_arg]  # type: ignore
                         i_depth = 0
                         func_call_list = []
                         continue
@@ -636,12 +386,12 @@ class MetaBashHandler:
                         ret = self.call_func(line, i_line)
                         if str(ret.__class__) == "<class 'dict'>":
                             if "functincallfailed" in ret.keys():
-                                self.bash.sendline(line)
+                                self.bash.sendline(line)  # type: ignore
                         i_line = i_line + 1
                         continue
 
                 # print(f"line = {line}")
-                self.bash.sendline(line)
+                self.bash.sendline(line)  # type: ignore
 
             i_line = i_line + 1
         nw_lines = getlines(self.bash)
@@ -651,7 +401,7 @@ class MetaBashHandler:
         for line in self.history:
             print(line)
 
-    def read_file(self, filename):
+    def read_file(self, filename: str) -> None:
         """Read in file and setup for executing the script.
 
         Raises:
@@ -690,3 +440,263 @@ class MetaBashHandler:
                     self.gotoDict[l_sp[0][0 : len(l_sp[0]) - 1]] = i_line
 
             # print(self.gotoDict)
+
+
+def check(bash_handler: MetaBashHandler, search_string: str) -> bool:
+    """Check function for MetaBashHandler checks whether string is found in gotten line.
+
+    Args:
+        bash_handler (MetaBashHandler): MetaBashHandler used
+        search_string (string): search string
+
+    Returns:
+        bool: whether
+    """
+    # if str(search_string.__class__) != "<class 'str'>":
+    # 	search_string = str(search_string)
+    if search_string[0] == '"' and search_string[len(search_string) - 1] == '"':
+        search_string = search_string[1 : len(search_string) - 1]
+    # print(f"history: {bash_handler.history}")
+    # print(f"l = \
+    # {bash_handler.history[len(bash_handler.history)python import class before defining -1].find(search_string)}")
+    for i_k in range(2):
+        # print(f"i_k = {i_k}")
+        if len(bash_handler.history) - 1 - i_k >= 0:
+            i = bash_handler.history[len(bash_handler.history) - 1 - i_k].find(
+                search_string
+            )
+            # print(f"{bash_handler.history[len(bash_handler.history)-1-i_k]} - \
+            # {search_string},\
+            # {bash_handler.history[len(bash_handler.history)-1-i_k].__class__}\
+            #  - {search_string.__class__}\n i = {i}")
+            # print(f"len: {len(bash_handler.history)}, index: \
+            # {len(bash_handler.history)-1-i}")
+            if i != -1:
+                # print(f"last: {bash_handler.history[\
+                # len(bash_handler.history)-1-i_k]}")
+                print(
+                    f" {search_string} found in {bash_handler.history[len(bash_handler.history)-1-i_k]}"
+                )
+
+                return True
+            print(
+                f" {search_string} not found in {bash_handler.history[len(bash_handler.history)-i_k-1]}"
+            )
+    return False
+
+
+def do_not(bash_handler: MetaBashHandler, b: Union[bool, str]) -> bool:
+    """Return inverse.
+
+    Args:
+        bash_handler (BashMetaHandler): BashMetaHandler (not used)
+        b (bool or string): input to take inverse
+
+    Returns:
+        boolean: invsers
+    """
+    if b == "True":
+        b = True
+    elif b == "False":
+        b = False
+    return not b
+
+
+def equal(
+    bash_handler: MetaBashHandler,
+    args: Union[typing.List[str], str],
+    argf: Union[typing.List[str], str] = [],
+) -> bool:
+    """Check whether arguemtns arge equal.
+
+    Args:
+        bash_handler (BashMetaHandler): BashMetaHandler to be used
+        args (list or str): first comparison or list of to arguments to be compared
+        argf (list or str, optional): second comparispyon. Defaults to [].
+
+    Returns:
+        bool: returns whether equal
+    """
+    if argf == []:
+        split_arg = args.split(",", 1)  # type: ignore
+
+        if split_arg[1].find("(") != 0 and (
+            split_arg[1][0] != '"' and split_arg[1][len(split_arg[1]) - 1] != '"'
+        ):
+            try:
+                ret = bash_handler.call_func(split_arg[1], -1)
+                cmp1 = str(ret)
+            except BaseException:
+                cmp1 = split_arg[1]
+        else:
+            cmp1 = split_arg[1]
+
+        if split_arg[0].find("(") != 0 and (
+            split_arg[0][0] != '"' and split_arg[0][len(split_arg[0]) - 1] != '"'
+        ):
+            try:
+                ret = bash_handler.call_func(split_arg[0], -1)
+                cmp0 = str(ret)
+            except BaseException:
+                cmp0 = split_arg[0]
+        else:
+            cmp1 = split_arg[0]
+
+        if cmp0[0] == '"' and cmp0[len(cmp0) - 1] == '"' and len(cmp0) > 2:
+            cmp0 = cmp0[1 : len(cmp0) - 1]
+
+        if cmp1[0] == '"' and cmp1[len(cmp1) - 1] == '"' and len(cmp1) > 2:
+            cmp1 = cmp1[1 : len(cmp1) - 1]
+
+        print(f"comparing {cmp0} and {cmp1}")
+
+        return cmp0 == cmp1
+    else:
+        if args[0] == '"' and args[len(args) - 1] == '"' and len(args) > 2:
+            args = args[1 : len(args) - 1]
+
+        if argf[0] == '"' and argf[len(argf) - 1] == '"' and len(argf) > 2:
+            argf = argf[1 : len(argf) - 1]
+        return args == argf
+
+
+def expect(bash_handler: MetaBashHandler, search_string_and_timeout: str) -> bool:
+    """Check expected output comes with timeout.
+
+    Args:
+        bash_handler (BashMetaHandler): BashMetaHandler to use
+        search_string_and_timeout (string): string of searchstring and timeout spareted by comma
+
+    Returns:
+        bool: whether expected strings found in timeout time
+    """
+    # print(f"Start expect without")
+    spl = search_string_and_timeout.split(",")
+    search_string = spl[0]
+    if search_string[0] == '"' and search_string[len(search_string) - 1] == '"':
+        search_string = search_string[1 : len(search_string) - 1]
+
+    if check(bash_handler, search_string):
+        return True
+    # print(bash_handler.history)
+
+    timeout = 5
+
+    if len(spl) > 1:
+        timeout = int(spl[1])
+    try:
+        bash_handler.bash.expect(search_string, timeout)  # type: ignore
+    except BaseException:
+        return False
+    return True
+
+
+def expect_check(
+    bash_handler: MetaBashHandler, search_string_and_timeout: str
+) -> typing.Any:
+    """Check expected output comes with timeout keeping the gotten lines.
+
+    Args:
+        bash_handler (BashMetaHandler): BashMetaHandler to use
+        search_string_and_timeout (str): string of searchstring and timeout spareted by comma
+
+    Returns:
+        Any: whether expected strings found in timeout time
+    """
+    print("entered expect_check")
+    spl = search_string_and_timeout.split(",")
+    search_string = spl[0]
+    if search_string[0] == '"' and search_string[len(search_string) - 1] == '"':
+        search_string = search_string[1 : len(search_string) - 1]
+
+    if check(bash_handler, search_string):
+        return True
+
+    timeout = 5
+
+    if len(spl) > 1:
+        timeout = int(spl[1])
+
+    start_time = datetime.datetime.now()
+    end_time = datetime.datetime.now()
+
+    time_dif = end_time - start_time
+    # print(f"timedif: {time_dif.seconds},{time_dif.microseconds}")
+    print(time_dif)
+    while time_dif.seconds + 1e-6 * time_dif.microseconds < timeout:
+        # print(f"timedif: {time_dif.seconds+1e-6*time_dif.microseconds}")
+        nw_lines = getlines(bash_handler.bash)
+        if nw_lines is not None:
+            print(f"nw_lines: {nw_lines}")
+
+        if nw_lines is not None:
+            bash_handler.history = [*bash_handler.history, *nw_lines]
+            if check(bash_handler, search_string):
+                return True
+        time.sleep(0.01)
+        time_dif = datetime.datetime.now() - start_time
+    return False
+
+
+def getlines(child: pexpect.pty_spawn.spawn) -> Union[typing.List[str], None]:
+    """Get nonblocking lines.
+
+    Args:
+        child (pexpect.pty_spawn.spawn): terminal object
+
+    Returns:
+        list: string list of gotten lines
+    """
+    lines = []
+    l_str = ""
+    while True:
+        try:
+            character = child.read_nonblocking(timeout=0.1)
+            l_str += character.decode()
+        except pexpect.exceptions.TIMEOUT:
+            break
+
+    lines = l_str.replace("\r", "").split("\n")
+    if lines == [""]:
+        return None
+    return lines
+
+
+def get_input(bash_handler: MetaBashHandler, text: str) -> str:
+    """Get user input.
+
+    Args:
+        bash_handler (BashMetaHandler): BashMetaHandler to be used
+        text (str): string to write when input is used
+
+    Returns:
+        str: return input string
+    """
+    if text == "":
+        return input()
+    else:
+        return input(text)
+
+
+def println(bash_handler: MetaBashHandler, text: str) -> bool:
+    """Print on screen.
+
+    Args:
+        bash_handler (BashMetaHandler): BashMetaHandler to be used
+        text (str): string to write
+
+    Returns:
+        bool: True always
+    """
+    print(text)
+    return True
+
+
+def wait(bash_handler: MetaBashHandler, timeout: typing.Any) -> None:
+    """Wait function waits seconds.
+
+    Args:
+        bash_handler (BashMetaHandler): _description_
+        timeout (Any): something converts to float [s]
+    """
+    time.sleep(float(timeout))
