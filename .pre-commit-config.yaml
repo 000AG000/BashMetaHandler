@@ -46,6 +46,7 @@ repos:
       - id: isort
         name: isort
         entry: isort
+        exclude: ^$|test_env/
         require_serial: true
         language: system
         types_or: [cython, pyi, python]
@@ -54,6 +55,7 @@ repos:
         name: pyupgrade
         description: Automatically upgrade syntax for newer versions.
         entry: pyupgrade
+        exclude: ^$|test_env/
         language: system
         types: [python]
         args: [--py37-plus]
@@ -67,3 +69,4 @@ repos:
     rev: v2.6.0
     hooks:
       - id: prettier
+        exclude: ^$|test_env/
