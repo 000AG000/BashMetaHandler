@@ -1,5 +1,4 @@
 #!/home/work/Dokumente/Projects/BashMetaHandler/BashMetaHandler/test_env/bin/python
-# -*- coding: utf8 -*-
 # :Copyright: © 2015 Günter Milde.
 # :License: Released under the terms of the `2-Clause BSD license`_, in short:
 #
@@ -20,15 +19,19 @@ The output is also valid XML.
 """
 
 try:
-    import locale # module missing in Jython
-    locale.setlocale(locale.LC_ALL, '')
+    import locale  # module missing in Jython
+
+    locale.setlocale(locale.LC_ALL, "")
 except locale.Error:
     pass
 
-from docutils.core import publish_cmdline, default_description
+from docutils.core import default_description
+from docutils.core import publish_cmdline
 
-description = (u'Generates HTML5 documents from standalone '
-               u'reStructuredText sources.\n'
-               + default_description)
 
-publish_cmdline(writer_name='html5', description=description)
+description = (
+    "Generates HTML5 documents from standalone "
+    "reStructuredText sources.\n" + default_description
+)
+
+publish_cmdline(writer_name="html5", description=description)

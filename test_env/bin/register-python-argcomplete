@@ -28,7 +28,10 @@ import sys
 
 import argcomplete
 
-parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+
+parser = argparse.ArgumentParser(
+    description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+)
 
 parser.add_argument(
     "--no-defaults",
@@ -50,10 +53,16 @@ parser.add_argument(
     help="output code for the specified shell",
 )
 parser.add_argument(
-    "-e", "--external-argcomplete-script", help="external argcomplete script for auto completion of the executable"
+    "-e",
+    "--external-argcomplete-script",
+    help="external argcomplete script for auto completion of the executable",
 )
 
-parser.add_argument("executable", nargs="+", help="executable to completed (when invoked by exactly this name)")
+parser.add_argument(
+    "executable",
+    nargs="+",
+    help="executable to completed (when invoked by exactly this name)",
+)
 
 argcomplete.autocomplete(parser)
 
@@ -66,6 +75,10 @@ args = parser.parse_args()
 
 sys.stdout.write(
     argcomplete.shellcode(
-        args.executable, args.use_defaults, args.shell, args.complete_arguments, args.external_argcomplete_script
+        args.executable,
+        args.use_defaults,
+        args.shell,
+        args.complete_arguments,
+        args.external_argcomplete_script,
     )
 )

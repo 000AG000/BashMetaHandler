@@ -14,7 +14,9 @@ class MetaBashHandler:
         self,
         filename: str = "",
         variable_dict: typing.Dict[str, typing.Any] = {},
-        function_dict: typing.Dict[str, Union[typing.Callable[..., typing.Any], None]] = {},
+        function_dict: typing.Dict[
+            str, Union[typing.Callable[..., typing.Any], None]
+        ] = {},
     ):
         """Initiation for the MetaBashHandler class.
 
