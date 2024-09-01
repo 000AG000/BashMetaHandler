@@ -21,11 +21,10 @@ class MetaBashHandler:
         """Initiation for the MetaBashHandler class.
 
         Args:
-            filename (str, optional): metabash filename. Defaults to "".
-            variable_dict (dict, optional): dictionary of variables keys are the variable names. Defaults to {}.
-            function_dict (dict, optional): dictionary of functions keys are the function names. Defaults to { "println": println, "print": println, "check": check, "wait": wait, "expect": expect_check, "input": get_input, "not": do_not, "equal": equal, }.
+            filename (str): metabash filename. Defaults to "".
+            variable_dict (dict): dictionary of variables keys are the variable names. Defaults to {}.
+            function_dict (dict): dictionary of functions keys are the function names. Defaults to { "println": println, "print": println, "check": check, "wait": wait, "expect": expect_check, "input": get_input, "not": do_not, "equal": equal, }.
         """
-
         if function_dict == {}:
             function_dict = {
                 "println": println,
@@ -206,7 +205,7 @@ class MetaBashHandler:
             BaseException: any line could not be executed
 
         Args:
-            filename (str, optional): filename to be used. Defaults to "".
+            filename (str): filename to be used. Defaults to "".
         """
         if self.filename == "":
             self.read_file(filename)
@@ -449,7 +448,7 @@ def check(bash_handler: MetaBashHandler, search_string: str) -> bool:
 
     Args:
         bash_handler (MetaBashHandler): MetaBashHandler used
-        search_string (string): search string
+        search_string (str): search string
 
     Returns:
         bool: whether
@@ -491,11 +490,11 @@ def do_not(bash_handler: MetaBashHandler, b: Union[bool, str]) -> bool:
     """Return inverse.
 
     Args:
-        bash_handler (BashMetaHandler): BashMetaHandler (not used)
+        bash_handler (MetaBashHandler): MetaBashHandler (not used)
         b (bool or string): input to take inverse
 
     Returns:
-        boolean: invsers
+        bool: invers
     """
     if b == "True":
         b = True
@@ -512,7 +511,7 @@ def equal(
     """Check whether arguemtns arge equal.
 
     Args:
-        bash_handler (BashMetaHandler): BashMetaHandler to be used
+        bash_handler (MetaBashHandler): MetaBashHandler to be used
         args (list or str): first comparison or list of to arguments to be compared
         argf (list or str, optional): second comparispyon. Defaults to [].
 
@@ -566,8 +565,8 @@ def expect(bash_handler: MetaBashHandler, search_string_and_timeout: str) -> boo
     """Check expected output comes with timeout.
 
     Args:
-        bash_handler (BashMetaHandler): BashMetaHandler to use
-        search_string_and_timeout (string): string of searchstring and timeout spareted by comma
+        bash_handler (MetaBashHandler): MetaBashHandler to use
+        search_string_and_timeout (str): string of searchstring and timeout spareted by comma
 
     Returns:
         bool: whether expected strings found in timeout time
@@ -599,7 +598,7 @@ def expect_check(
     """Check expected output comes with timeout keeping the gotten lines.
 
     Args:
-        bash_handler (BashMetaHandler): BashMetaHandler to use
+        bash_handler (MetaBashHandler): MetaBashHandler to use
         search_string_and_timeout (str): string of searchstring and timeout spareted by comma
 
     Returns:
@@ -668,7 +667,7 @@ def get_input(bash_handler: MetaBashHandler, text: str) -> str:
     """Get user input.
 
     Args:
-        bash_handler (BashMetaHandler): BashMetaHandler to be used
+        bash_handler (MetaBashHandler): MetaBashHandler to be used
         text (str): string to write when input is used
 
     Returns:
@@ -684,7 +683,7 @@ def println(bash_handler: MetaBashHandler, text: str) -> bool:
     """Print on screen.
 
     Args:
-        bash_handler (BashMetaHandler): BashMetaHandler to be used
+        bash_handler (MetaBashHandler): MetaBashHandler to be used
         text (str): string to write
 
     Returns:
@@ -698,7 +697,7 @@ def wait(bash_handler: MetaBashHandler, timeout: typing.Any) -> None:
     """Wait function waits seconds.
 
     Args:
-        bash_handler (BashMetaHandler): _description_
+        bash_handler (MetaBashHandler): MetaBashHandler not used
         timeout (Any): something converts to float [s]
     """
     time.sleep(float(timeout))

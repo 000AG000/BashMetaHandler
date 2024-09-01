@@ -2,7 +2,7 @@
 import pytest
 from click.testing import CliRunner
 
-from BashMetaHandler import *
+from BashMetaHandler import MetaBashHandler
 from BashMetaHandler import __main__
 
 
