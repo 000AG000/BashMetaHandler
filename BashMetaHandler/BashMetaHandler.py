@@ -157,12 +157,10 @@ class MetaBashHandler:
                                 i_start = i_comma + 1
                             i_last = i_comma
 
-                        else:
-                            print(
-                                f"i_open: {i_open},i_close: {i_close},i_quotes: {i_quotes}"
-                            )
-                            print("false Quote Handling")
-                            raise
+                        else: # at the end of the search string
+                            func_args.append(func_arg[i_start:len(func_arg)].strip())
+                            func_names.append(None)
+                            break
                     # print(f"func_names: {func_names}\nfunc_args:{func_args}")
                     for i_in_func in range(len(func_names)):
                         if func_names[i_in_func] is not None:
