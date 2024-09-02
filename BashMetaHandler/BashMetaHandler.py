@@ -157,8 +157,8 @@ class MetaBashHandler:
                                 i_start = i_comma + 1
                             i_last = i_comma
 
-                        else: # at the end of the search string
-                            func_args.append(func_arg[i_start:len(func_arg)].strip())
+                        else:  # at the end of the search string
+                            func_args.append(func_arg[i_start : len(func_arg)].strip())
                             func_names.append(None)
                             break
                     # print(f"func_names: {func_names}\nfunc_args:{func_args}")
@@ -591,30 +591,29 @@ def expect(bash_handler: MetaBashHandler, search_string_and_timeout: str) -> boo
 
 
 def expect_check(
-    bash_handler: MetaBashHandler, search_string: str, timeout: Union[str,int] = 5
+    bash_handler: MetaBashHandler,
+    search_string: str,
+    timeout: Union[str, int, float] = 5,
 ) -> typing.Any:
     """Check expected output comes with timeout keeping the gotten lines.
 
     Args:
         bash_handler (MetaBashHandler): MetaBashHandler to use
         search_string (str): string of searchstring and timeout spareted by comma
-        timeout (str,int): seconds before getting timeout
+        timeout (str,int,float): seconds before getting timeout
 
     Returns:
         Any: whether expected strings found in timeout time
     """
     print("entered expect_check")
-    
+
     if search_string[0] == '"' and search_string[len(search_string) - 1] == '"':
         search_string = search_string[1 : len(search_string) - 1]
 
     if check(bash_handler, search_string):
         return True
 
-    timeout = 5
-
-    if len(spl) > 1:
-        timeout = int(spl[1])
+    timeout = float(timeout)
 
     start_time = datetime.datetime.now()
     end_time = datetime.datetime.now()
