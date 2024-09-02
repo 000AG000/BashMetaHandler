@@ -92,7 +92,7 @@ class MetaBashHandler:
                 # check func_arg has functions
                 i_last = func_arg.find("(")
                 if i_last != -1:
-                    i_last = 0
+                    i_last = -1
                     i_begin = 0
                     i_b = 0
 
