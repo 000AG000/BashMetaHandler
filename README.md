@@ -39,7 +39,6 @@ typing-extensions==4.7.1 ; python_version >= "3.7" and python_version < "3.8"
 zipp==3.15.0 ; python_version >= "3.7" and python_version < "3.8"
 zope-interface==6.4.post2 ; python_version >= "3.7" and python_version < "4.0"
 
-
 ## Installation
 
 You can install _bmh_ via [pip] from [PyPI]:
