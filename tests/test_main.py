@@ -2,7 +2,7 @@
 import pytest
 from click.testing import CliRunner
 
-from BashMetaHandler import MetaBashHandler
+import BashMetaHandler
 from BashMetaHandler import __main__
 
 
@@ -21,7 +21,7 @@ def test_main_succeeds(runner: CliRunner) -> None:
 def test_python_test(runner: CliRunner) -> None:
     """Test as simple python example."""
     try:
-        bash = MetaBashHandler("tests/test_msh_scripts/testing.msh")
+        bash = BashMetaHandler.MetaBashHandler("tests/test_msh_scripts/testing.msh")  # type: ignore[attr-defined,unused-ignore,operator]
         bash.execute_file()
     except BaseException:
         assert False is True
