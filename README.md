@@ -1,4 +1,4 @@
-# bmh
+# BashMetaHandler
 
 [![PyPI](https://img.shields.io/pypi/v/BashMetaHandler.svg)][pypi_]
 [![Status](https://img.shields.io/pypi/status/BashMetaHandler.svg)][status]
@@ -27,7 +27,18 @@ It provites an interpreter for a own bash meta languange
 
 ## Requirements
 
-- TODO
+click==8.1.7 ; python_version >= "3.7" and python_version < "4.0"
+colorama==0.4.6 ; python_version >= "3.7" and python_version < "4.0" and platform_system == "Windows"
+datetime==5.5 ; python_version >= "3.7" and python_version < "4.0"
+importlib-metadata==4.2.0 ; python_version >= "3.7" and python_version < "3.8"
+pexpect==4.9.0 ; python_version >= "3.7" and python_version < "4.0"
+ptyprocess==0.7.0 ; python_version >= "3.7" and python_version < "4.0"
+pytz==2024.1 ; python_version >= "3.7" and python_version < "4.0"
+setuptools==68.0.0 ; python_version >= "3.7" and python_version < "4.0"
+typing-extensions==4.7.1 ; python_version >= "3.7" and python_version < "3.8"
+zipp==3.15.0 ; python_version >= "3.7" and python_version < "3.8"
+zope-interface==6.4.post2 ; python_version >= "3.7" and python_version < "4.0"
+
 
 ## Installation
 
