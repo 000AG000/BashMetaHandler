@@ -591,20 +591,20 @@ def expect(bash_handler: MetaBashHandler, search_string_and_timeout: str) -> boo
 
 
 def expect_check(
-    bash_handler: MetaBashHandler, search_string_and_timeout: str
+    bash_handler: MetaBashHandler, search_string: str, timeout: Union[str,int] = 5
 ) -> typing.Any:
     """Check expected output comes with timeout keeping the gotten lines.
 
     Args:
         bash_handler (MetaBashHandler): MetaBashHandler to use
-        search_string_and_timeout (str): string of searchstring and timeout spareted by comma
+        search_string (str): string of searchstring and timeout spareted by comma
+        timeout (str,int): seconds before getting timeout
 
     Returns:
         Any: whether expected strings found in timeout time
     """
     print("entered expect_check")
-    spl = search_string_and_timeout.split(",")
-    search_string = spl[0]
+    
     if search_string[0] == '"' and search_string[len(search_string) - 1] == '"':
         search_string = search_string[1 : len(search_string) - 1]
 
