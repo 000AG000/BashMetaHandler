@@ -1,5 +1,5 @@
 """Sphinx configuration."""
-project = "bmh"
+project = "BashMetaHandler"
 author = "Alexander Gundermann"
 copyright = "2024, Alexander Gundermann"
 extensions = [
