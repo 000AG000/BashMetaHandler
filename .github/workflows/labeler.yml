@@ -6,6 +6,9 @@ on:
       - main
       - master
 
+permissions:
+  pull-requests: read
+
 jobs:
   labeler:
     runs-on: ubuntu-latest
