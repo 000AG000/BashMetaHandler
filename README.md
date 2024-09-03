@@ -23,7 +23,7 @@
 
 ## Features
 
-It provites an interpreter for a own bash meta languange
+It provites an interpreter for a own bash meta languange. Currently only tested for linux systems.
 
 ## Requirements
 
