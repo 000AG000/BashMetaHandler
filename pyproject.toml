@@ -47,12 +47,11 @@ sphinx-click = ">=3.0.2"
 typeguard = ">=2.13.3"
 xdoctest = {extras = ["colors"], version = ">=0.15.10"}
 myst-parser = {version = ">=0.16.1"}
+nox-poetry = "^1.0.3"
 
 [tool.poetry.scripts]
 BashMetaHandler = "BashMetaHandler.__main__:main"
 
-[tool.poetry.group.dev.dependencies]
-nox-poetry = "^1.0.3"
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]
