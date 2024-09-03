@@ -188,9 +188,9 @@ class MetaBashHandler:
                     print(f"function_dict:[{func_name}](self,*{results})")
                     res = self.function_dict[func_name](self, *results)  # type: ignore
             except BaseException:
-                print(
-                    f"({i_line+1}) function {func_name}({func_arg}) not executed properly"
-                )
+                # print(
+                #    f"({i_line+1}) function {func_name}({func_arg}) not executed properly"
+                # )
                 # raise
                 return {"functincallfailed": -1}
                 # res = True
@@ -220,7 +220,8 @@ class MetaBashHandler:
             # check new incomming lines
             nw_lines = getlines(self.bash)
             if nw_lines is not None:
-                print(f"nw_lines: {nw_lines}")
+                for l1 in nw_lines:
+                    print(f"(msh) {l1}")
             # if nw_lines is not None: print(f"func_call_list: {func_call_list}")
 
             if nw_lines is not None:
@@ -233,7 +234,7 @@ class MetaBashHandler:
             while i_f != -1:
                 i_l = line.find(")")
                 var = line[i_f : i_l + 1]
-                print(f"line = {line}")
+                # print(f"line = {line}")
                 try:
                     line = line.replace(var, self.variable_dict[var[2 : len(var) - 1]])
                 except BaseException:
@@ -394,11 +395,11 @@ class MetaBashHandler:
 
             i_line = i_line + 1
         nw_lines = getlines(self.bash)
-        print(f"nw_lines: {nw_lines}")
+        # print(f"nw_lines: {nw_lines}")
         if nw_lines is not None:
             self.history = [*self.history, *nw_lines]
-        for line in self.history:
-            print(line)
+        # for line in self.history:
+        #    print(line)
 
     def read_file(self, filename: str) -> None:
         """Read in file and setup for executing the script.
@@ -473,14 +474,14 @@ def check(bash_handler: MetaBashHandler, search_string: str) -> bool:
             if i != -1:
                 # print(f"last: {bash_handler.history[\
                 # len(bash_handler.history)-1-i_k]}")
-                print(
-                    f" {search_string} found in {bash_handler.history[len(bash_handler.history)-1-i_k]}"
-                )
+                # print(
+                #    f" {search_string} found in {bash_handler.history[len(bash_handler.history)-1-i_k]}"
+                # )
 
                 return True
-            print(
-                f" {search_string} not found in {bash_handler.history[len(bash_handler.history)-i_k-1]}"
-            )
+            # print(
+            #    f" {search_string} not found in {bash_handler.history[len(bash_handler.history)-i_k-1]}"
+            # )
     return False
 
 
@@ -547,7 +548,7 @@ def equal(
         if cmp1[0] == '"' and cmp1[len(cmp1) - 1] == '"' and len(cmp1) > 2:
             cmp1 = cmp1[1 : len(cmp1) - 1]
 
-        print(f"comparing {cmp0} and {cmp1}")
+        # print(f"comparing {cmp0} and {cmp1}")
 
         return cmp0 == cmp1
     else:
@@ -620,12 +621,13 @@ def expect_check(
 
     time_dif = end_time - start_time
     # print(f"timedif: {time_dif.seconds},{time_dif.microseconds}")
-    print(time_dif)
+    # print(time_dif)
     while time_dif.seconds + 1e-6 * time_dif.microseconds < timeout:
         # print(f"timedif: {time_dif.seconds+1e-6*time_dif.microseconds}")
         nw_lines = getlines(bash_handler.bash)
         if nw_lines is not None:
-            print(f"nw_lines: {nw_lines}")
+            for l1 in nw_lines:
+                print(f"(msh) {l1}")
 
         if nw_lines is not None:
             bash_handler.history = [*bash_handler.history, *nw_lines]
