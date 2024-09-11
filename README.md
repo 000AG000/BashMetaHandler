@@ -49,6 +49,16 @@ $ pip install BashMetaHandler
 
 ## Usage
 
+The main purpose of this library is to provide an interpreter for the self-created metabashlanguage. The MetaBashHandler-class handles this interpretation. When on object of this class is created it initiates a bash terminal where the interpreted language is executed. 
+
+Firstly, it a provided file is read and lines for the goto-command are searched and indexed. They must be a word followed by an ":".Secondly, the execute_file function will run the interpreter.
+
+The metabashlanguange has normally the ending ".msh". When not a special case the input goes directly to the bash terminal. It has the advantage to not care whether you are directly in the bash terminal are input of a program run by the terminal. Keywords implemented are: while, if, elif, else. When used you have to use a tab to indicate how long these keywords effect should be (similar to python).
+
+Additionally you are provided with functions to be used. They are used as follows functionname(arg1,arg2,...). There are a few prebuild functions to use given as default parameters to the MetaBashHandler. These are: check, do_not, equal, expect, expect_check, get_input, println and wait. The actual functionname are sometimes different to the actual python functionnames. You can also create your own function, the first argument should always be the MetaBashHandler object.
+
+Finally there you can use variables indicated by $(variable name). They will be replaced with the content of the variable given to the MetaBashHandler object.
+
 Please see the [Command-line Reference] for details.
 
 ## Contributing
