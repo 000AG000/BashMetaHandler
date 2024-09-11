@@ -90,7 +90,7 @@ class MetaBashHandler:
                 func_names: typing.List[typing.Any] = []
 
                 # check func_arg has functions
-                i_last = func_arg.find("(")
+                i_last = max(func_arg.find("("), func_arg.find(","))
                 if i_last != -1:
                     i_last = -1
                     i_begin = 0
@@ -450,7 +450,7 @@ def check(
     Args:
         bash_handler (MetaBashHandler): MetaBashHandler used
         search_string (str): search string
-        search_depth (int): lines to search in
+        search_depth (int,str): lines to search in
 
     Returns:
         bool: whether
@@ -459,6 +459,7 @@ def check(
     # 	search_string = str(search_string)
     if search_string[0] == '"' and search_string[len(search_string) - 1] == '"':
         search_string = search_string[1 : len(search_string) - 1]
+    search_depth = int(search_depth)
     # print(f"history: {bash_handler.history}")
     # print(f"l = \
     # {bash_handler.history[len(bash_handler.history)python import class before defining -1].find(search_string)}")

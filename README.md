@@ -49,7 +49,7 @@ $ pip install BashMetaHandler
 
 ## Usage
 
-The main purpose of this library is to provide an interpreter for the self-created metabashlanguage. The MetaBashHandler-class handles this interpretation. When on object of this class is created it initiates a bash terminal where the interpreted language is executed. 
+The main purpose of this library is to provide an interpreter for the self-created metabashlanguage. The MetaBashHandler-class handles this interpretation. When on object of this class is created it initiates a bash terminal where the interpreted language is executed.
 
 Firstly, it a provided file is read and lines for the goto-command are searched and indexed. They must be a word followed by an ":".Secondly, the execute_file function will run the interpreter.
 
