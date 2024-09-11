@@ -442,12 +442,15 @@ class MetaBashHandler:
             # print(self.gotoDict)
 
 
-def check(bash_handler: MetaBashHandler, search_string: str) -> bool:
+def check(
+    bash_handler: MetaBashHandler, search_string: str, search_depth: int = 2
+) -> bool:
     """Check function for MetaBashHandler checks whether string is found in gotten line.
 
     Args:
         bash_handler (MetaBashHandler): MetaBashHandler used
         search_string (str): search string
+        search_depth (int): lines to search in
 
     Returns:
         bool: whether
@@ -459,7 +462,7 @@ def check(bash_handler: MetaBashHandler, search_string: str) -> bool:
     # print(f"history: {bash_handler.history}")
     # print(f"l = \
     # {bash_handler.history[len(bash_handler.history)python import class before defining -1].find(search_string)}")
-    for i_k in range(2):
+    for i_k in range(search_depth):
         # print(f"i_k = {i_k}")
         if len(bash_handler.history) - 1 - i_k >= 0:
             i = bash_handler.history[len(bash_handler.history) - 1 - i_k].find(
@@ -652,7 +655,7 @@ def getlines(child: pexpect.pty_spawn.spawn) -> Union[typing.List[str], None]:
     while True:
         try:
             character = child.read_nonblocking(timeout=0.1)
-            l_str += character.decode()
+            l_str += character.decode(errors="ignore")
         except pexpect.exceptions.TIMEOUT:
             break
 
