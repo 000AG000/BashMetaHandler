@@ -450,7 +450,9 @@ def check(
     Args:
         bash_handler (MetaBashHandler): MetaBashHandler used
         search_string (str): search string
-        search_depth (int,str): lines to search in
+        search_depth (int,str): lines to search isn
+
+    # noqa: DAR103
 
     Returns:
         bool: whether
