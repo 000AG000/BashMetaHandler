@@ -185,7 +185,7 @@ class MetaBashHandler:
                 if func_names == []:
                     res = self.function_dict[func_name](self, func_arg)  # type: ignore
                 else:
-                    print(f"function_dict:[{func_name}](self,*{results})")
+                    # print(f"function_dict:[{func_name}](self,*{results})")
                     res = self.function_dict[func_name](self, *results)  # type: ignore
             except BaseException:
                 # print(
