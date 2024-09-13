@@ -4,5 +4,7 @@ i
 while not(check("7"))
 	i = i+1
 	i
+if and(check("5",10),check("6",10))
+	println("both_check")
 exit()
 echo END
