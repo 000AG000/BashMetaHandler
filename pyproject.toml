@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "BashMetaHandler"
-version = "1.0.4"
+version = "1.1.0"
 description = "bmh"
 authors = ["Alexander Gundermann <416c657861@posteo.de>"]
 license = "MIT"

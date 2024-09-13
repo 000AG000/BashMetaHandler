@@ -35,6 +35,9 @@ class MetaBashHandler:
                 "input": get_input,
                 "not": do_not,
                 "equal": equal,
+                "set": set,
+                "and": do_and,
+                "or": do_or,
             }
 
         self.filename = filename
@@ -442,6 +445,34 @@ class MetaBashHandler:
             # print(self.gotoDict)
 
 
+def do_and(bash_handler: MetaBashHandler, statement_1: bool, statement_2: bool) -> bool:
+    """Does and AND operation to the arguments.
+
+    Args:
+        bash_handler (MetaBashHandler): not used
+        statement_1 (bool): first argument to perform AND operation
+        statement_2 (bool): second argument to perform AND operation
+
+    Returns:
+        bool: return an AND operation of the two statements
+    """
+    return statement_1 and statement_2
+
+
+def do_or(bash_handler: MetaBashHandler, statement_1: bool, statement_2: bool) -> bool:
+    """Does and OR operation to the arguments.
+
+    Args:
+        bash_handler (MetaBashHandler): not used
+        statement_1 (bool): first argument to perform OR operation
+        statement_2 (bool): second argument to perform OR operation
+
+    Returns:
+        bool: return an OR operation of the two statements
+    """
+    return statement_1 or statement_2
+
+
 def check(
     bash_handler: MetaBashHandler, search_string: str, search_depth: int = 2
 ) -> bool:
@@ -696,6 +727,29 @@ def println(bash_handler: MetaBashHandler, text: str) -> bool:
     """
     print(text)
     return True
+
+
+def set(bash_handler: MetaBashHandler, value_name: str, value: typing.Any) -> None:
+    """Sets value of MetaBashHandler.
+
+    Args:
+            bash_handler (MetaBashHandler): MetaBashHandler to be effected
+            value_name (str): the name of the value
+            value (typing.Any): set value
+    """
+    if value.__class__ == str:
+        if value[0] == '"' and value[len(value) - 1] == '"' and len(value) > 1:
+            value = value[1 : len(value) - 1]
+
+    if (
+        value_name[0] == '"'
+        and value_name[len(value_name) - 1] == '"'
+        and len(value_name) > 1
+    ):
+        value_name = value_name[1 : len(value_name) - 1]
+
+    bash_handler.variable_dict[value_name] = value
+    # print(f"variable_dict[{value_name}] set to {str(value)}")
 
 
 def wait(bash_handler: MetaBashHandler, timeout: typing.Any) -> None:
