@@ -1803,13 +1803,13 @@ files = [
 
 [[package]]
 name = "safety"
-version = "3.2.7"
+version = "3.2.10"
 description = "Checks installed dependencies for known vulnerabilities and licenses."
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "safety-3.2.7-py3-none-any.whl", hash = "sha256:7f111b689901f2e65f7dd524e4c84158c368bcbbdbb38cbbb06ba1249250da11"},
-    {file = "safety-3.2.7.tar.gz", hash = "sha256:cd6093b82d84e85815f037334f1b83ed89d31f767b7b324bfed6228c434f2667"},
+    {file = "safety-3.2.10-py3-none-any.whl", hash = "sha256:3f177107ed3d0859ee081c56491739c13fcb12b5cf854f35d62eb324d5c0a581"},
+    {file = "safety-3.2.10.tar.gz", hash = "sha256:8ed71c43869f96613797c3ef9f0e27927db6c05d1ff81d5439bb64c13cc45242"},
 ]
 
 [package.dependencies]
@@ -1825,7 +1825,7 @@ pydantic = ">=1.10.12"
 requests = "*"
 rich = "*"
 "ruamel.yaml" = ">=0.17.21"
-safety-schemas = ">=0.0.4"
+safety-schemas = ">=0.0.8"
 setuptools = ">=65.5.1"
 typer = "*"
 typing-extensions = ">=4.7.1"
@@ -1838,19 +1838,19 @@ spdx = ["spdx-tools (>=0.8.2)"]
 
 [[package]]
 name = "safety-schemas"
-version = "0.0.5"
+version = "0.0.8"
 description = "Schemas for Safety tools"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "safety_schemas-0.0.5-py3-none-any.whl", hash = "sha256:6ac9eb71e60f0d4e944597c01dd48d6d8cd3d467c94da4aba3702a05a3a6ab4f"},
-    {file = "safety_schemas-0.0.5.tar.gz", hash = "sha256:0de5fc9a53d4423644a8ce9a17a2e474714aa27e57f3506146e95a41710ff104"},
+    {file = "safety_schemas-0.0.8-py3-none-any.whl", hash = "sha256:5a5b0820dd385e779dc228a5a2fe27cbf9a018ff329224bacf38c38c5a7e861a"},
+    {file = "safety_schemas-0.0.8.tar.gz", hash = "sha256:f4c63b7012facc2f59b9abcbe48acfd5bd5068e58e62d39753db4667499320fa"},
 ]
 
 [package.dependencies]
 dparse = ">=0.6.4b0"
 packaging = ">=21.0"
-pydantic = "*"
+pydantic = ">=2.5.0,<2.6.0"
 ruamel-yaml = ">=0.17.21"
 typing-extensions = ">=4.7.1"
 
@@ -2387,4 +2387,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "a7618aa412aff7b87647106ecb10229a7edbece19cf3013955150b0619080071"
+content-hash = "6765fc06a3ddbedfca4e3923a615d6e1131ee02d61c804910b55d61519f78ade"
